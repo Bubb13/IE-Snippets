@@ -128,11 +128,11 @@ Infinity_DoFile("B3CONRED")
 
 				LPF REPLACE_MULTILINE INT_VAR num = 1 STR_VAR pattern = ~		showMageMemorizationFlash = false
 		setMageBookLevel(1, true)~ string = ~
-				-- B3ContingencyRedirect Edit Start
+		-- B3ContingencyRedirect Edit Start
 
-				if B3ContingencyRedirect_MageDoRedirect() then return end
+		if B3ContingencyRedirect_MageDoRedirect() then return end
 
-				-- B3ContingencyRedirect Edit End
+		-- B3ContingencyRedirect Edit End
 
 		showMageMemorizationFlash = false
 		setMageBookLevel(1, true)~
