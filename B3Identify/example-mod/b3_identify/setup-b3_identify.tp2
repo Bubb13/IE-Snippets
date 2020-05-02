@@ -1,0 +1,16 @@
+BACKUP ~b3_identify/backup~
+AUTHOR ~Bubb~
+VERSION 1.0
+
+BEGIN ~Bubb Test~
+REQUIRE_PREDICATE (FILE_EXISTS_IN_GAME ~UI.MENU~) ~UI.MENU not found in game.~
+REQUIRE_PREDICATE (GAME_IS ~bgee bg2ee eet iwdee~) ~Game not supported.~
+
+	INCLUDE ~b3_identify/B3Identify.tph~
+	LAF B3_IDENTIFY_INSTALL END
+	
+	COPY ~b3_identify\copy\B3IDEN.SPL~ ~override~
+		SAY 0x8 ~Bubb Test Identify~
+	BUT_ONLY
+	
+	LAF B3_IDENTIFY_REGISTER INT_VAR uses = 4 STR_VAR resref = ~B3IDEN~ END
