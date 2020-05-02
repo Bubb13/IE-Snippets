@@ -124,7 +124,7 @@ Infinity_DoFile("B3CONRED")
 
 		COPY_EXISTING ~UI.MENU~ ~override~
 
-			PATCH_IF MOD_IS_INSTALLED ~LeUI.tp2~ ~0~ BEGIN
+			PATCH_IF MOD_IS_INSTALLED ~LeUI.tp2~ ~0~ OR MOD_IS_INSTALLED ~LeUI-BG1EE.tp2~ ~0~ OR MOD_IS_INSTALLED ~LeUI-SoD.tp2~ ~0~ BEGIN
 
 				LPF REPLACE_MULTILINE INT_VAR num = 1 STR_VAR pattern = ~		showMageMemorizationFlash = false
 		setMageBookLevel(1, true)~ string = ~
