@@ -1,0 +1,11 @@
+BACKUP ~bubb_fix_bg2_tot_crash/backup~
+AUTHOR ~Bubb~
+VERSION ~1.0~
+
+BEGIN ~Bubb's Fix BG2 TOT Crash~
+REQUIRE_PREDICATE GAME_IS ~tob~ ~Game not supported.~
+
+	COPY ~bgmain.exe~ ~.~
+		
+		WRITE_ASCII 0x5AAE89 ~é€˜~
+		WRITE_ASCII 0x6A470E ~ÇAÿÿÿÿè§Íúÿéogðÿ~
