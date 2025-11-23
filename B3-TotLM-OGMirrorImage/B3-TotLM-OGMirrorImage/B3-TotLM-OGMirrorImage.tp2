@@ -1,0 +1,22 @@
+BACKUP ~weidu_external/B3-TotLM-OGMirrorImage/backup~
+AUTHOR ~Bubb~
+VERSION ~v1.0~
+
+ALWAYS
+	ACTION_IF !VARIABLE_IS_SET always BEGIN
+		INCLUDE ~B3-TotLM-OGMirrorImage/lib/always.tph~
+		OUTER_SET always = 1
+	END
+END
+
+BEGIN ~TotLM OG Mirror Image~ LABEL ~B3-TotLM-OGMirrorImage-Main~
+REQUIRE_PREDICATE ~%WEIDU_OS%~ STRING_EQUAL ~win32~ ~OS not supported.~
+REQUIRE_PREDICATE GAME_IS ~totlm~ ~Game not supported.~
+
+	LAF PATCH_EXECUTABLE
+		INT_VAR
+			patch_address = 0xEBB8E
+		STR_VAR
+			exe_name      = ~idmain.exe~
+			patch_write   = ~90 90 90 90 90 90~
+	END

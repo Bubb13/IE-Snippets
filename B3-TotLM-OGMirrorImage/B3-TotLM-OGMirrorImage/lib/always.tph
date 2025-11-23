@@ -1,0 +1,71 @@
+
+DEFINE_PATCH_FUNCTION HEX_DIGIT_TO_NUMBER
+	INT_VAR
+		digit = 0
+	RET
+		result
+BEGIN
+	PATCH_IF digit >= 48 AND digit <= 57 BEGIN
+		result = digit - 48
+	END ELSE PATCH_IF digit >= 65 AND digit <= 70 BEGIN
+		result = digit - 55
+	END ELSE PATCH_IF digit >= 97 AND digit <= 102 BEGIN
+		result = digit - 87
+	END ELSE BEGIN
+		PATCH_FAIL ~Malformed hex digit~
+	END
+END
+
+DEFINE_PATCH_FUNCTION PARSE_HEX_STRING
+	STR_VAR
+		str = ~~
+	RET
+		byte_count
+		result
+BEGIN
+	byte_count = 0
+
+	INNER_PATCH ~%str%~ BEGIN
+
+		SPRINT MATCH3 ~~
+
+		REPLACE_EVALUATE ~\( *\([a-fA-F0-9][a-fA-F0-9]\) *\)\|\(.\)~ BEGIN
+
+			PATCH_IF !(~%MATCH3%~ STRING_EQUAL ~~) BEGIN
+				PATCH_FAIL ~Malformed hex string~
+			END
+
+			INNER_PATCH ~%MATCH2%~ BEGIN
+				READ_BYTE 0 upper_digit
+				READ_BYTE 1 lower_digit
+			END
+
+			LPF HEX_DIGIT_TO_NUMBER INT_VAR digit = upper_digit RET upper_num = result END
+			LPF HEX_DIGIT_TO_NUMBER INT_VAR digit = lower_digit RET lower_num = result END
+
+			SET $byte_array(~%byte_count%~) = upper_num * 16 | lower_num
+			++byte_count
+
+		END ~%MATCH0%~
+	END
+
+	INNER_PATCH_SAVE result ~~ BEGIN
+		INSERT_BYTES 0 byte_count
+		FOR (i = 0; i < byte_count; ++i) BEGIN
+			WRITE_BYTE i $byte_array(~%i%~)
+		END
+	END
+END
+
+DEFINE_ACTION_FUNCTION PATCH_EXECUTABLE
+	INT_VAR
+		patch_address = 0
+	STR_VAR
+		exe_name      = ~~
+		patch_write   = ~~
+BEGIN
+	COPY ~%exe_name%~ ~%exe_name%~
+		LPF PARSE_HEX_STRING STR_VAR str = EVAL ~%patch_write%~ RET parsed_patch_write = result END
+		WRITE_EVALUATED_ASCII patch_address ~%parsed_patch_write%~
+	BUT_ONLY
+END
